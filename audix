@@ -1,108 +1,84 @@
 #!/usr/bin/env bash
 
-HEAD="<!DOCTYPE html>
-<html>
-<head>
+HEAD1="<!DOCTYPE html>
+<html><head>
 <script>
-function pauseAll() {
-    var audios = document.getElementsByTagName('audio');
-    for(var i = 0, len = audios.length; i < len;i++){
-        audios[i].pause();
-        audios[i].currentTime = 0;
-    }
-}
 document.addEventListener('play', function(e){
-    var audios = document.getElementsByTagName('audio');
-    for(var i = 0, len = audios.length; i < len;i++){
-        if(audios[i] != e.target){
-            audios[i].pause();
-            audios[i].currentTime = 0;
-        }
-    }
+  var audios = document.getElementsByTagName('audio');
+  for(var i = 0, len = audios.length; i < len;i++){
+    if(audios[i] == e.target) continue;
+    audios[i].pause();
+    audios[i].currentTime = 0;
+  }
 }, true);
 </script>
 <style>
 body {
-	color: #000;
-	background-color: white;
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 16pt;
-	margin: 8mm;
+  color: #000;
+  background-color: white;
+  font-family: Verdana, Helvetica, sans-serif;
+  font-size: 16pt;
+  margin: 8mm;
 }
 h1, h2, h3, h4, h5, h6 {
-	color: black;
-	background-color: inherit;
-	clear: both;
-	font-weight: bold;
-	margin-top: 5mm;
+  color: black;
+  background-color: inherit;
+  clear: both;
+  font-weight: bold;
+  margin-top: 5mm;
 }
-table {
-	font-size: inherit;
-}
+table {  font-size: inherit;  }
 a {
-	color: #000;
-	text-decoration: none;
-	background-color: transparent;
+  color: #000;
+  text-decoration: none;
+  background-color: transparent;
 }
-a:hover {
-	color: #666;
-}
-a:active {
-	color: #666;
-}
+a:hover {  color: #666;  }
+a:active { color: #666;  }
 a.back {
-	font-size: 32pt;
-	color: #000;
+  font-size: 32pt;
+  color: #000;
 }
-a.back:hover {
-	color: #666;
-}
-a.back:active {
-	color: #666;
-}
-p.back {
-	margin: 0;
-	padding: 0;
-	margin-block-start: 0;
-    margin-block-end: 0;
-}
+a.back:hover {  color: #666;  }
+a.back:active { color: #666;  }
 table.cover {
-	margin-bottom: 8mm;
-	width: 360px;
+  margin-bottom: 8mm;
+  width: 360px;
 }
 .cover td {
-	vertical-align: middle;
-	text-align: center;
+  vertical-align: middle;
+  text-align: center;
 }
 img {
-	width: 360px;
-	border-style: solid;
-	border-color: black;
-	border-width: 1px;
+  width: 360px;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
 }
-</style>
-</head>
+</style>"
 
-<body>"
+HEAD2="</head><body>"
+TAIL="</body></html>"
 
-TAIL="
-</body>
-</html>"
-
-echo "$HEAD" > index.html
+echo "$HEAD1" > index.html
+echo "<title>Audix</title>" >> index.html
+echo "$HEAD2" >> index.html
 
 IFS=$'\n'
 for D in $(ls -1v . | egrep -v "\.[a-z]*$"); do
-  echo "<a href=\"$D/index.html\"><table class=\"cover\"><tr><td><img src=\"$D/cover.jpg\"></td></tr><tr><td>$D</td></tr></table></a>" >> index.html
-  echo "$HEAD" > $D/index.html
+  DP=$(echo "$D" | sed 's/ /%20/g')
+  echo "<table class=\"cover\"><tr><td><a href=\"$DP/index.html\"><img src=\"$DP/cover.jpg\" alt=\"cover\"></a></td></tr><tr><td><a href=\"$DP/index.html\">$D</a></td></tr></table>" >> index.html
+  echo "$HEAD1" > $D/index.html
+  echo "<title>$D</title>" >> $D/index.html
+  echo "$HEAD2" >> $D/index.html
   echo '<p class="back"><a class="back" href="../index.html">⯇</a></p>' >> $D/index.html
   echo "<h1>$D</h1>" >> $D/index.html
-#  echo '<p><a onclick="pauseAll();" href="#">⏸︎ Pause</a></p>'
-  echo "<img src=\"cover.jpg\">" >> $D/index.html
+  echo "<img src=\"cover.jpg\" alt=\"cover\">" >> $D/index.html
   echo "<table>" >> $D/index.html
   for A in $(ls -1v $D | egrep "\.(wav|ogg|m4a|mp3)$"); do
     AX=${A%.*}
-    echo "<tr><td><audio controls><source src=\"$A\"></audio></td><td>$AX</td></tr>" >> $D/index.html
+    AP=$(echo "$A" | sed 's/ /%20/g')
+    echo "<tr><td><audio controls><source src=\"$AP\"></audio></td><td>$AX</td></tr>" >> $D/index.html
   done
   echo "</table>" >> $D/index.html
   echo "$TAIL" >> $D/index.html
