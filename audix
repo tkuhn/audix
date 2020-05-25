@@ -2,6 +2,7 @@
 
 HEAD1="<!DOCTYPE html>
 <html><head>
+<meta charset=\"utf-8\">
 <script>
 document.addEventListener('play', function(e){
   var audios = document.getElementsByTagName('audio');
