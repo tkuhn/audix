@@ -65,13 +65,18 @@ echo "<title>Audix</title>" >> index.html
 echo "$HEAD2" >> index.html
 
 IFS=$'\n'
+C=0
 for D in $(ls -1v . | egrep -v "\.[a-z]*$"); do
+  C=$((C+1))
   DP=$(echo "$D" | sed 's/ /%20/g')
-  echo "<table class=\"cover\"><tr><td><a href=\"$DP/index.html\"><img src=\"$DP/cover.jpg\" alt=\"cover\"></a></td></tr><tr><td><a href=\"$DP/index.html\">$D</a></td></tr></table>" >> index.html
+  echo "<table class=\"cover\" id=\"album$C\">" >> index.html
+  echo "<tr><td><a href=\"$DP/index.html\"><img src=\"$DP/cover.jpg\" alt=\"cover\"></a></td></tr>" >> index.html
+  echo "<tr><td><a href=\"$DP/index.html\">$D</a></td></tr>" >> index.html
+  echo "</table>" >> index.html
   echo "$HEAD1" > $D/index.html
   echo "<title>$D</title>" >> $D/index.html
   echo "$HEAD2" >> $D/index.html
-  echo '<p class="back"><a class="back" href="../index.html">⯇</a></p>' >> $D/index.html
+  echo "<p class=\"back\"><a class=\"back\" href=\"../index.html#album$C\">⯇</a></p>" >> $D/index.html
   echo "<h1>$D</h1>" >> $D/index.html
   echo "<img src=\"cover.jpg\" alt=\"cover\">" >> $D/index.html
   echo "<table>" >> $D/index.html
