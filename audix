@@ -11,6 +11,33 @@ document.addEventListener('play', function(e){
     audios[i].currentTime = 0;
   }
 }, true);
+var elem = document.documentElement;
+var fullscreen = false;
+function toggleFullScreen() {
+  if (fullscreen) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { /* Firefox */
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE/Edge */
+      document.msExitFullscreen();
+    }
+    fullscreen = false;
+  } else {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+      elem.msRequestFullscreen();
+    }
+    fullscreen = true;
+  }
+}
 </script>
 <style>
 body {
@@ -27,25 +54,18 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   margin-top: 5mm;
 }
-table {  font-size: inherit;  }
 a {
   color: #000;
   text-decoration: none;
   background-color: transparent;
 }
-a:hover {  color: #666;  }
-a:active { color: #666;  }
-a.back {
-  font-size: 32pt;
-  color: #000;
-}
-a.back:hover {  color: #666;  }
-a.back:active { color: #666;  }
+a:hover, a:active, a.icon:hover, a.icon:active {  color: #666;  }
+a.icon { font-size: 32pt; }
 table.cover {
   margin-bottom: 8mm;
   width: 360px;
 }
-.cover td {
+table.cover td {
   vertical-align: middle;
   text-align: center;
 }
@@ -55,6 +75,19 @@ img {
   border-color: black;
   border-width: 1px;
 }
+div.left, div.right {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+}
+div.left {
+  float: left;
+  text-align: center;
+}
+div.right {
+  float: right;
+  text-align: center;
+}
 </style>"
 
 HEAD2="</head><body>"
@@ -63,6 +96,7 @@ TAIL="</body></html>"
 echo "$HEAD1" > index.html
 echo "<title>Audix</title>" >> index.html
 echo "$HEAD2" >> index.html
+echo "<div class=\"right\"><a class=\"icon\" onclick=\"toggleFullScreen()\" href=\"#\">&#x26F6;</a></div>" >> index.html
 
 IFS=$'\n'
 C=0
@@ -76,7 +110,8 @@ for D in $(ls -1v . | egrep -v "\.[a-z]*$"); do
   echo "$HEAD1" > $D/index.html
   echo "<title>$D</title>" >> $D/index.html
   echo "$HEAD2" >> $D/index.html
-  echo "<p class=\"back\"><a class=\"back\" href=\"../index.html#album$C\">⯇</a></p>" >> $D/index.html
+  echo "<div class=\"left\"><a class=\"icon\" href=\"../index.html#album$C\">&#x2BC7;</a></div>" >> $D/index.html
+  echo "<div class=\"right\"><a class=\"icon\" onclick=\"toggleFullScreen()\" href=\"#\">&#x26F6;</a></div>" >> $D/index.html
   echo "<h1>$D</h1>" >> $D/index.html
   echo "<img src=\"cover.jpg\" alt=\"cover\">" >> $D/index.html
   echo "<table>" >> $D/index.html
