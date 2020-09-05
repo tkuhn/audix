@@ -106,7 +106,7 @@ for D in $(ls -1v . | egrep -v "\.[a-z]*$"); do
   echo "$HEAD1" > $D/index.html
   echo "<title>$D</title>" >> $D/index.html
   echo "$HEAD2" >> $D/index.html
-  echo "<div class=\"left\"><a class=\"icon\" href=\"../index.html#album$C\">&#x2BC7;</a></div>" >> $D/index.html
+  echo "<div class=\"left\"><a class=\"icon\" href=\"../index.html#album$C\">&lt;</a></div>" >> $D/index.html
   echo "<div class=\"right\"><a class=\"icon\" onclick=\"toggleFullScreen()\" href=\"#\">&#x26F6;</a></div>" >> $D/index.html
   echo "<h1>$D</h1>" >> $D/index.html
   echo "<img src=\"cover.jpg\" alt=\"cover\">" >> $D/index.html
